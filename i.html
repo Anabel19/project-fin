@@ -1,0 +1,128 @@
+<?php
+include("seguridad.php");?>
+<p><a href="logout.php">Log out</a></p>
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+ <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+ <link rel="stylesheet"  href="main-page.css">
+ <script>
+var usersPorId = {};
+
+function cargarUsers() {
+  jQuery.ajax({method: "GET", url: "users.json.php", dataType: 'text'}).done(function( responseText ) {
+      var json = JSON.parse(responseText);
+      var html = "<tr><td>id</td><td>Username</td></tr>";
+      for (var i=0; i<json.length; i++) {
+          html += "<tr onclick='senialUser(\"" + json[i].id + "\", )'><td>";
+          html += json[i].id + "</td><td>";
+		  html += json[i].username + "</td></tr>";
+          //html += "<button onclick='eliminarAlumno(\"" + json[i].username + "\")'>X</button></td></tr>";
+		  
+		  usersPorId[json[i].username] = json[i];
+      }
+      jQuery("#userss").html(html);
+  });
+}
+//permite seleccionar algun usuario[in this case nuestra your username]
+function senialUser(id,username) {
+	var _user = usersPorId[id,username];
+	//jQuery("#nombres").val(_user.nombres);
+	jQuery("#id").val(_user.id);
+	jQuery("#username").val(_user.username)
+	//jQuery("#password").val(_user.password)
+	//jQuery.ajax({method: "POST", url: "receptor.json.php", data: JSON.stringify(_user), dataType: 'json'}).done(function( responseText ) {
+		//cargarMsj();
+	//});
+	//reconocerD(id);
+	cargarMsj();
+}
+
+function reconocerD(id){
+//alert(username);
+	var destino=$("#username").val();
+	alert(destino);
+	/*
+	var destino = {
+		"nickname_": jQuery("#username").val(),
+	};
+	*/
+	jQuery.ajax({method: "POST", url: "receptor.json.php", data:{nickname:destino}, dataType: 'text'}).done(function( responseText ) {
+		//cargarMsj();
+	});
+}
+
+var msjPorId= {};
+function cargarMsj() {
+  jQuery.ajax({method: "GET", url: "msj.json.php",  dataType: 'text'}).done(function( responseText ) {
+      var json = JSON.parse(responseText);
+      var html = "<tr><td>destinatario</td><td>mensaje</td></tr>";
+      for (var i=0; i<json.length; i++) {
+          html += "<tr onclick='senialMsj(\"" + json[i].id + "\")'><td>";
+		  html += json[i].destinatario + "</td><td>";
+		  html += json[i].mensaje + "</td><td>";
+		  html += json[i].h_d + "</td></tr>";
+		  
+		  msjPorId[json[i].id] = json[i];
+      }
+      jQuery("#msjs").html(html);
+  });
+}
+function senialMsj(id) {
+ var userXmsj = msjPorId[id];
+ jQuery("#destinatario").val(userXmsj.destinatario);
+ jQuery("#mensaje").val(userXmsj.mensaje)
+}
+
+function sendMsj() {
+  var uso = {
+	"destinatario":  jQuery("#destinatario").val(),
+	"newmensaje":  jQuery("#newmensaje").val()
+  };
+  jQuery.ajax({method: "POST", url: "ready.json.php", data: JSON.stringify(uso), dataType: 'text'}).done(function( responseText ) {
+	cargarMsj();
+  });
+}
+
+</script>
+
+</head>
+
+<body>
+	<table>
+	<tr><td><img class="avatar" src="imagenes/user.jpg"  alt="Person View"></td></tr>
+	</table>
+  
+	<script language='JavaScript' type='text/javascript'>
+	cargarUsers();
+	</script> 
+	<table id="userss" border="1">
+	</table>
+	
+	 <script language='JavaScript' type='text/javascript'>
+		cargarMsj();
+	 </script> 
+	 <table id="msjs" border="1"></table>
+	 
+	
+	 
+	<div class="mssj">
+			<form  action="ready.json.php" method="POST">				
+				<p><label for="destinatario">destinatario</label></p>
+				<input type="text" id="destinatario" >
+				
+				
+				<table id="msjs" border="1"></table>
+	 
+				<p><input type="text" id="mensaje" placeholder=" " required></p>
+				
+				<p><label for="newmensaje">Mensaje</label></p>	
+				<textarea type="text" id="newmensaje" placeholder="" required></textarea>
+				<input type="button" onclick="sendMsj()" value="enviar" id="enviomsj"/>
+			</form>
+	 </div>
+</body>
+
+</html>

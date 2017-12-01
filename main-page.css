@@ -1,0 +1,40 @@
+body {
+    background-color: lightgray;
+	font-family: Helvetica, Arial, sans-serif;
+}
+table {
+    color: black;
+    text-align: left;
+}
+h3{
+	color: blue;
+}
+#msjs{
+	margin:auto;
+}
+.mssj{
+	width:300px; 
+	margin:auto;
+}
+
+.avatar
+{
+	text-align: left;
+	top:40px;
+	left:30px;
+	width:150px;
+	height="100"
+}
+p {
+    font-family: verdana;
+    font-size: 12px;
+}
+
+
+
+
+
+
+
+
+

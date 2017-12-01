@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+ <link rel="stylesheet"  href="estilos.css">
+ <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+ <script>
+function registerUser() {
+  var user = {
+    "username":  jQuery("#username").val(),
+	"nombres":  jQuery("#nombres").val(),
+	"apellidos": jQuery("#apellidos").val(),
+	"fecha_nacimiento":  jQuery("#fecha_nacimiento").val(),
+	"email":  jQuery("#email").val(),
+	"password":  jQuery("#password").val()
+  };
+  jQuery.ajax({method: "POST", url: "save-user.json.php", data: JSON.stringify(user), dataType: 'text'}).done(function( responseText) {
+	cargarUsers();
+	//alert(responseText);
+  });
+}
+/*
+function editarAlumno(username) {
+ var _user = usersPorId[username];
+ jQuery("#apellidos").val(_user.apellidos);
+ jQuery("#nombres").val(_user.nombres);
+ jQuery("#fecha_nacimiento").val(_user.fecha_nacimiento)
+ jQuery("#email").val(_user.email)
+ jQuery("#username").val(_user.username);
+ jQuery("#password").val(_user.password)
+}*/
+function verificarUser() {
+	var usuario = {
+		"username": jQuery("#usernameA").val(),
+		"password": jQuery("#passwordA").val()
+	};	
+    jQuery.ajax({method: "POST", url: "login.json.php", data: JSON.stringify(usuario), dataType: 'text'}).done(function( response ) {
+	$("#response").html(response);
+/*
+	if(response.indexOf('done')!=-1)
+		window.location.href='i.html'
+*/
+//	location.href = "i.html";
+	})
+}
+</script>
+
+
+</head>
+
+<body>
+  <table>
+  <tr><td><img class="avatar" src="imagenes/incognita.png"  alt="Person View"></td></tr>
+  </table>
+  <div id="index">
+	
+	<form method="post" > <!--action="login.json.php"-->
+		<p><input type="text" id="usernameA" placeholder="Username"/></p>
+		<p><input type="password" id="passwordA" placeholder="Password"/></p>
+		<!--<p><button id="login_btn">Log in</button></p>-->
+		<!--<input type="button" value="Log in" id="login_btn"/>-->
+	 </form>
+	 <p id="response"></p> <!--responde al login-->
+	 
+	<button onclick="verificarUser()">Iniciar Sesi&oacute;n</button>
+ 
+	 <h3>Resgister</h3>
+	 <table id="nuevo-user" border="1">
+	  <tr><td>Nombres</td><td><input id="nombres" /></td></tr>
+	  <tr><td>Apellido</td><td><input id="apellidos" /></td></tr>
+	  <tr><td>Fecha Nacimiento</td><td><input id="fecha_nacimiento" /></td></tr>
+	  <tr><td>Email</td><td><input id="email" /></td></tr>
+	  <tr><td>Username</td><td><input id="username" /></td></tr>
+	  <tr><td>Password</td><td><input id="password" /></td></tr>
+	 </table>
+	 <button onclick="registerUser()">Registrar</button>
+   </div>
+</body>
+
+</html>
